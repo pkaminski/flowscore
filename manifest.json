@@ -1,0 +1,18 @@
+{
+  "name": "Flowscore",
+  "version": "0.1",
+  "description": "Adds cool features to the Flowkey webapp.",
+  "manifest_version": 2,
+  "permissions": ["*://app.flowkey.com/*", "*://cdn.flowkey.com/*", "storage", "power"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://app.flowkey.com/*"],
+      "css": ["styles.css"],
+      "js": ["player.js"]
+    }
+  ]
+}

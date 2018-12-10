@@ -1,0 +1,101 @@
+.flowscore-score-button {
+  left: 15px;
+  height: 60px;
+  width: 150px;
+  transform: translateY(-15px);
+  color: black;
+  background: none;
+  border: 1px solid #676d73;
+  border-radius: 30px;
+}
+
+#flowscore-score {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: #878787;
+  font-size: 0.75em;
+  background-image: url(/packages/flow-player/images/randomBG-sheet.jpg);
+  background-size: cover;
+}
+
+#flowscore-pages {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 9px;
+  margin: 5px;
+}
+
+#flowscore-scale {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin: 5px;
+}
+
+#flowscore-scale-gauge {
+  display: inline-block;
+  width: 40px;
+}
+
+.flowscore-scale-button {
+  display: inline-block;
+  width: 30px;
+  padding: 8px;
+  border: 1px solid #cfd0d3;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+#flowscore-scale-down::before {
+  content: "-";
+}
+
+#flowscore-scale-up::before {
+  content: "+";
+}
+
+#flowscore-close {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  padding: 8px;
+  margin: 5px;
+  border: 1px solid #cfd0d3;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+#flowscore-close::before {
+  content: "exit";
+}
+
+#flowscore-score .content {
+  margin: 30px;
+  pointer-events: none;
+}
+
+#flowscore-score .flowscore-artist {
+  font-family: HelveticaNeue,Helvetica Neue,Roboto,sans-serif;
+  letter-spacing: 0.0143em;
+  font-weight: 400;
+  font-size: 15px;
+  color: #676d73;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+#flowscore-score .flowscore-title {
+  font-family: HelveticaNeue-Thin,Helvetica Neue-Thin,Helvetica Neue,Roboto,sans-serif;
+  font-weight: 100;
+  font-size: 44px;
+  color: black;
+  margin: 15px 0 26px;
+  text-align: center;
+}
