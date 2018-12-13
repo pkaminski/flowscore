@@ -1,9 +1,9 @@
-chrome.power.requestKeepAwake('display');
+'use strict';
 
 chrome.runtime.onMessage.addListener(function(message, sender, reply) {
   switch (message.action) {
-    case 'buildStrip': {
-      buildStrip(message.imageUrls, reply);
+    case 'analyze': {
+      analyze(message.imageUrls, reply);
       return true;
     }
     case 'keepAwake': {
@@ -19,31 +19,33 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
   }
 });
 
-function buildStrip(imageUrls, reply) {
+function analyze(imageUrls, reply) {
+
   Promise.all(imageUrls.map(url => fetch(url).then(response => {
-    if (!response.ok) throw new Error('HTTP error, status ' + reponse.status);
+    if (!response.ok) throw new Error('HTTP error, status ' + response.status);
     return response.blob().then(blob => createImageBitmap(blob));
   }))).then(images => {
     const height = images[0].height;
+    const imageWidth = images[0].width;
+    const minBarHeight = height >= 300 ? 200 : 100;
     let width = 0;
-    for (const image of images) width += image.width;
-    const canvas = document.createElement('canvas');
-    canvas.setAttribute('width', width);
-    canvas.setAttribute('height', height);
-    const ctx = canvas.getContext('2d');
-    let x = 0;
-    for (const image of images) {
-      ctx.drawImage(image, x, 0);
-      x += image.width;
+    const bitmaps = images.map(image => {
+      width += image.width;
+      const canvas = document.createElement('canvas');
+      canvas.setAttribute('width', image.width);
+      canvas.setAttribute('height', image.height);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(image, 0, 0);
+      const data = ctx.getImageData(0, 0, image.width, image.height).data;
       image.close();
-    }
-    const data = ctx.getImageData(0, 0, width, height).data;
+      return data;
+    });
     let leftEdge = 0, rightEdge = width - 1;
     while (leftEdge < width && isColumnEmpty(leftEdge)) leftEdge++;
     while (rightEdge > 0 && isColumnEmpty(rightEdge)) rightEdge--;
-    const bars = detectBars();
-    console.log({width, height, leftEdge, rightEdge, bars});
-    reply({data: canvas.toDataURL(), width, height, leftEdge, rightEdge, bars});
+    const detectedBars = detectBars();
+    console.log({width, height, leftEdge, rightEdge, minBarHeight, detectedBars});
+    reply({width, height, leftEdge, rightEdge, bars: detectedBars});
 
 
     function isColumnEmpty(x) {
@@ -54,7 +56,7 @@ function buildStrip(imageUrls, reply) {
     }
 
     function pixelAt(x, y) {
-      return data[(y * width + x) * 4 + 3];
+      return bitmaps[Math.floor(x / imageWidth)][(y * imageWidth + (x % imageWidth)) * 4 + 3];
     }
 
     function detectBars() {
@@ -81,10 +83,10 @@ function buildStrip(imageUrls, reply) {
       for (let y = 0; y < height; y++) {
         if (pixelAt(x, y)) {
           streak++;
-          if (streak > height / 2) return true;
+          if (streak > minBarHeight) return true;
         } else {
           streak = 0;
-          if (y > height / 2) return false;
+          if (y > height - minBarHeight) return false;
         }
       }
       return false;

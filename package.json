@@ -1,0 +1,14 @@
+{
+  "name": "flowscore",
+  "version": "1.0.0",
+  "description": "Adds cool features to the Flowkey webapp.",
+  "repository": "git@github.com:pkaminski/flowscore.git",
+  "author": "Piotr Kaminski <piotr@ideanest.com>",
+  "license": "The Unlicense",
+  "devDependencies": {
+    "eslint": "^5.10.0"
+  },
+  "dependencies": {
+    "lz-string": "^1.4.4"
+  }
+}

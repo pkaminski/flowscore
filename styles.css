@@ -1,12 +1,40 @@
-.flowscore-score-button {
-  left: 15px;
+.flowscore-control-button {
   height: 60px;
-  width: 150px;
   transform: translateY(-15px);
   color: black;
   background: none;
   border: 1px solid #676d73;
   border-radius: 30px;
+}
+
+.flowscore-score-button {
+  right: 15px;
+  width: 150px;
+}
+
+.flowscore-erase-button {
+  left: 15px;
+  width: 60px;
+}
+
+.flowscore-erase-button.active {
+  color: white;
+  background-color: #676d73;
+}
+
+#flowscore-sketch {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.flowscore-annotations {
+  stroke: #e7840f;
+  stroke-width: 1.75px;
+  stroke-linecap: round;
+  fill: none;
 }
 
 #flowscore-score {
@@ -20,6 +48,14 @@
   font-size: 0.75em;
   background-image: url(/packages/flow-player/images/randomBG-sheet.jpg);
   background-size: cover;
+}
+
+.flowscore-relative {
+  position: relative;
+}
+
+#flowscore-score .content svg {
+  position: absolute;
 }
 
 #flowscore-pages {
