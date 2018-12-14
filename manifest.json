@@ -1,24 +1,24 @@
 {
   "name": "Flowscore",
-  "version": "0.1",
+  "version": "0.8",
   "description": "Adds cool features to the Flowkey webapp.",
   "manifest_version": 2,
   "permissions": ["*://app.flowkey.com/*", "*://cdn.flowkey.com/*", "storage", "power"],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["src/background.js"],
     "persistent": false
   },
   "content_scripts": [
     {
       "matches": ["https://app.flowkey.com/*"],
-      "css": ["styles.css"],
+      "css": ["src/styles.css"],
       "js": [
         "node_modules/lz-string/libs/lz-string.min.js",
-        "options.js",
-        "scribbles.js",
-        "score.js",
-        "annotations.js",
-        "player.js"
+        "src/options.js",
+        "src/scribbles.js",
+        "src/score.js",
+        "src/annotations.js",
+        "src/player.js"
       ]
     }
   ]
