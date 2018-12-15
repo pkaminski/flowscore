@@ -1,3 +1,7 @@
+#secondPositionMarker {
+  pointer-events: none;
+}
+
 .flowscore-control-button {
   height: 60px;
   transform: translateY(-15px);
