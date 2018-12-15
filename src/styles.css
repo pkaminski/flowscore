@@ -1,4 +1,4 @@
-#secondPositionMarker {
+#secondPositionMarker, #flat-noten-bg > #selectorElement, #sheet-wrapper > #selectorElement {
   pointer-events: none;
 }
 

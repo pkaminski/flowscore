@@ -1,6 +1,6 @@
 {
   "name": "Flowscore",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Adds cool features to the Flowkey webapp.",
   "manifest_version": 2,
   "permissions": ["*://app.flowkey.com/*", "*://cdn.flowkey.com/*", "storage", "power"],

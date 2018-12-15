@@ -111,7 +111,7 @@ class Score {
     if (this._pages) scoreElement.removeChild(this._pages[this._currentPage].element);
     this._pages = [];
     let barIndex = 0;
-    while (barIndex < this._analysis.bars.length) {
+    while (barIndex < this._analysis.bars.length - 1) {
       const page = this._paintPage(barIndex, barIndex ? 0 : HEADER_HEIGHT);
       if (barIndex === 0) {
         page.element = this._buildHeader(page.element);
@@ -154,15 +154,17 @@ class Score {
     element.appendChild(canvas);
     const numStaffs = Math.floor(height / ((this._staffHeight + STAFF_GAP) * scale)) || 1;
     let top = 0;
-    for (let i = 0; i < numStaffs && barIndex < bars.length; i++) {
+    for (let i = 0; i < numStaffs && barIndex < bars.length - 1; i++) {
       const firstBarIndex = barIndex;
       const left = firstBarIndex ? bars[firstBarIndex].leftEdge : this._analysis.leftEdge;
+      barIndex++;
       while (
-        barIndex + 1 < bars.length &&
-        (bars[barIndex + 1].rightEdge - left) * this._imageRatio * scale < width
+        barIndex < bars.length &&
+        (bars[barIndex].rightEdge - left) * this._imageRatio * scale < width
       ) {
         barIndex++;
       }
+      barIndex--;
       const right = bars[barIndex].rightEdge;
       const stripWidth = right - left;
       this._blitImages(ctx, top, left, right);

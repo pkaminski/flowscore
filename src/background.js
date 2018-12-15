@@ -27,10 +27,12 @@ function analyze(imageUrls, reply) {
   }))).then(images => {
     const height = images[0].height;
     const imageWidth = images[0].width;
+    const imageWidths = [];
     const minBarHeight = height >= 300 ? 200 : 100;
     let width = 0;
     const bitmaps = images.map(image => {
       width += image.width;
+      imageWidths.push(image.width);
       const canvas = document.createElement('canvas');
       canvas.setAttribute('width', image.width);
       canvas.setAttribute('height', image.height);
@@ -56,7 +58,8 @@ function analyze(imageUrls, reply) {
     }
 
     function pixelAt(x, y) {
-      return bitmaps[Math.floor(x / imageWidth)][(y * imageWidth + (x % imageWidth)) * 4 + 3];
+      const k = Math.floor(x / imageWidth);
+      return bitmaps[k][(y * imageWidths[k] + (x % imageWidth)) * 4 + 3];
     }
 
     function detectBars() {
