@@ -4,7 +4,8 @@
 let lastDecoratedPath;
 
 function initScore() {
-  if (window.location.pathname.startsWith('/player/')) {
+  if (window.location.pathname.startsWith('/player/') &&
+      !/&courseId=/.test(window.location.search)) {
     const sheetElement = document.getElementById('sheet');
     const titleElement = document.getElementById('flat-song-info');
     const artistElement = document.getElementById('flat-song-artist');
