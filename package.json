@@ -1,6 +1,6 @@
 {
   "name": "flowscore",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "Adds cool features to the Flowkey webapp.",
   "repository": "git@github.com:pkaminski/flowscore.git",
   "author": "Piotr Kaminski <piotr@ideanest.com>",

@@ -1,5 +1,5 @@
 'use strict';
-/* global localOptions saveOptions SHEET_HEIGHT */
+/* global SHEET_HEIGHT */
 /* exported Score */
 
 const STAFF_GAP = 15;
@@ -7,11 +7,12 @@ const MARGIN = 30;
 const HEADER_HEIGHT = 100;
 
 class Score {
-  constructor(images, title, artist, scribbles) {
+  constructor(images, title, artist, scribbles, options) {
     this._images = images;
     this._title = title;
     this._artist = artist;
     this._scribbles = scribbles;
+    this._options = options;
     this.openButton = this._createOpenButton();
     this._analyze(images);
     this._paint = this._paint.bind(this);
@@ -45,6 +46,7 @@ class Score {
   }
 
   async showScore() {
+    await this._options.ready;
     this._annotations = await this._scribbles.renderPassive();
     const scoreElement = document.createElement('div');
     scoreElement.setAttribute('id', 'flowscore-score');
@@ -101,8 +103,8 @@ class Score {
   }
 
   _scale(delta) {
-    localOptions.scale += delta / 100;
-    saveOptions();
+    this._options.scale += delta / 100;
+    this._options.save();
     this._paint();
   }
 
@@ -121,7 +123,7 @@ class Score {
       this._pages.push(page);
     }
     document.getElementById('flowscore-scale-gauge').textContent =
-      Math.round(localOptions.scale * 100) + '%';
+      Math.round(this._options.scale * 100) + '%';
     this._turnPage();
   }
 
@@ -141,7 +143,7 @@ class Score {
 
   _paintPage(barIndex, heightReduction = 0) {
     const bars = this._analysis.bars;
-    const scale = localOptions.scale;
+    const scale = this._options.scale;
     const width = window.innerWidth - 2 * MARGIN;
     const height = window.innerHeight - 2 * MARGIN - heightReduction;
     const element = document.createElement('div');
@@ -181,7 +183,7 @@ class Score {
   }
 
   _blitImages(ctx, top, left, right) {
-    const scale = localOptions.scale;
+    const scale = this._options.scale;
     const canvas = {x: 0, y: top, w: undefined, h: this._imageHeight * scale};
     const startImageIndex = Math.floor(left / this._imageWidth);
     const endImageIndex = Math.floor(right / this._imageWidth);

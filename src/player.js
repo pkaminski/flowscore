@@ -1,5 +1,5 @@
 'use strict';
-/* global Scribbles Score RollAnnotations */
+/* global Options Scribbles Score RollAnnotations */
 
 let lastDecoratedPath;
 
@@ -10,13 +10,15 @@ function initScore() {
     const titleElement = document.getElementById('flat-song-info');
     const artistElement = document.getElementById('flat-song-artist');
     if (!sheetElement || !titleElement || !artistElement) return;
-    const scribbles = new Scribbles(window.location.pathname.replace(/\/player\//, ''));
+    const songId = window.location.pathname.replace(/\/player\//, '');
+    const options = new Options(songId);
+    const scribbles = new Scribbles(songId);
     scribbles.ready.catch(e => {
       alert('Failed to load annotations: ' + e);
     });
     const score = new Score(
       sheetElement.getElementsByTagName('img'), titleElement.textContent, artistElement.textContent,
-      scribbles
+      scribbles, options
     );
     const annotations = new RollAnnotations(sheetElement, scribbles);
     document.getElementById('player-layout').appendChild(score.openButton);

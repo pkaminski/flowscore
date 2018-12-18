@@ -1,19 +1,51 @@
 'use strict';
-/* exported localOptions, saveOptions */
+/* exported Options */
 
-const OPTIONS_KEY = 'options';
-const DEFAULT_LOCAL_OPTIONS = {scale: 1};
+const GLOBAL_KEYS = [];
 
-let localOptions;
+class Options {
+  constructor(songId) {
+    this._songOptionsKey = `options_${songId}`;
+    this._globalOptionsKey = 'options';
+    this._loadPromise = this._load();
 
-init();
+    // Default values
+    this.scale = 1;
+  }
 
-function init() {
-  return chrome.storage.local.get(OPTIONS_KEY, result => {
-    localOptions = result[OPTIONS_KEY] || DEFAULT_LOCAL_OPTIONS;
-  });
-}
+  get ready() {
+    return this._loadPromise;
+  }
 
-function saveOptions() {
-  chrome.storage.local.set({[OPTIONS_KEY]: localOptions});
+  async _load() {
+    const optionsKeys = [this._songOptionsKey, this._globalOptionsKey];
+    await new Promise((resolve, reject) => {
+      chrome.storage.local.get(optionsKeys, result => {
+        if (chrome.runtime.lastError) return reject(chrome.runtime.lastError);
+        for (const optionsKey of optionsKeys) {
+          if (result[optionsKey]) {
+            for (const key in result[optionsKey]) {
+              this[key] = result[optionsKey][key];
+            }
+          }
+        }
+        resolve();
+      });
+    });
+  }
+
+  async save() {
+    const values = {[this._songOptionsKey]: {}, [this._globalOptionsKey]: {}};
+    for (const key in this) {
+      if (!this.hasOwnProperty(key) || key.startsWith('_')) continue;
+      const optionsKey = GLOBAL_KEYS.includes(key) ? this._globalOptionsKey : this._songOptionsKey;
+      values[optionsKey][key] = this[key];
+    }
+    await new Promise((resolve, reject) => {
+      chrome.storage.local.set(values, () => {
+        if (chrome.runtime.lastError) return reject(chrome.runtime.lastError);
+        resolve();
+      });
+    });
+  }
 }
